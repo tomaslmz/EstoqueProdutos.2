@@ -1,5 +1,7 @@
 import java.util.ArrayList;
 
+import model.Produto;
+
 public class ProdutoVestuario extends Produto {
 
 	private Tamanhos tamanho;

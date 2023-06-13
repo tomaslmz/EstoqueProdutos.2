@@ -1,21 +1,26 @@
+package model;
 
 public class Produto {
-	private int codigo;
 	private String nome;
 	private float preco;
+	private int estoque;
 	
-	public Produto(int codigo, String nome, float preco) {
-		setCodigo(codigo);
+	public Produto(String nome, float preco, int estoque) {
+		setEstoque(estoque);
 		setNome(nome);
 		setPreco(preco);
 	}
 	
-	public int getCodigo() {
-		return codigo;
+	public Produto() {
+		setEstoque(0);
+	}
+	
+	public int getEstoque() {
+		return estoque;
 	}
 
-	public void setCodigo(int codigo) {
-		this.codigo = codigo;
+	public void setEstoque(int estoque) {
+		this.estoque = estoque;
 	}
 
 	public String getNome() {

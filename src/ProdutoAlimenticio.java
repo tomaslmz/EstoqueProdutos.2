@@ -2,6 +2,8 @@ import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.Calendar;
 
+import model.Produto;
+
 public class ProdutoAlimenticio extends Produto {
 
 	private Calendar dataValidade;

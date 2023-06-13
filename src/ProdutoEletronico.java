@@ -1,5 +1,7 @@
 import java.util.ArrayList;
 
+import model.Produto;
+
 public class ProdutoEletronico extends Produto {
 	
 	private String marca;
