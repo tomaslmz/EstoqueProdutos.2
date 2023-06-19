@@ -1,4 +1,4 @@
-package view;
+package views;
 
 import model.Produto;
 import java.awt.EventQueue;
@@ -103,8 +103,6 @@ public class TelaProduto extends JFrame {
 					
 					modelo.addRow(new Object[] {p.getNome(), p.getPreco(), p.getEstoque()});
 					
-					
-					
 					tbProduto.setModel(modelo);
 					
 					txtNome.setText("");
@@ -135,13 +133,39 @@ public class TelaProduto extends JFrame {
 		btnEditar = new JButton("Editar");
 		btnEditar.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent e) {
-				Produto p = new Produto(txtNome.getText(), Float.parseFloat(txtPreco.getText()), Integer.parseInt(txtEstoque.getText()));
-				DefaultTableModel modelo = (DefaultTableModel) tbProduto.getModel();
-				
-				modelo.setValueAt(p.getNome(), tbProduto.getSelectedRow(), 0);
-				modelo.setValueAt(p.getPreco(), tbProduto.getSelectedRow(), 1);
-				modelo.setValueAt(p.getEstoque(), tbProduto.getSelectedRow(), 2);
-			}
+				if(tbProduto.getSelectedRow() < 0) {
+					JOptionPane.showMessageDialog(null, "Selecione uma linha para editar");
+				} else {
+					String nome;
+					String preco;
+					String estoque;
+					
+					if(txtNome.getText().isEmpty()) {
+						nome = tbProduto.getModel().getValueAt(tbProduto.getSelectedRow(), 0).toString();
+					} else {
+						nome = txtNome.getText();
+					}
+					
+					if(txtPreco.getText().isEmpty()) {
+						preco = tbProduto.getModel().getValueAt(tbProduto.getSelectedRow(), 1).toString();
+					} else {
+						preco = txtPreco.getText();
+					}
+					
+					if(txtEstoque.getText().isEmpty()) {
+						estoque = tbProduto.getModel().getValueAt(tbProduto.getSelectedRow(), 2).toString();
+					} else {
+						estoque = txtEstoque.getText();
+					}
+					
+					Produto p = new Produto(nome, Float.parseFloat(preco), Integer.parseInt(estoque));
+					DefaultTableModel modelo = (DefaultTableModel) tbProduto.getModel();
+					
+					modelo.setValueAt(p.getNome(), tbProduto.getSelectedRow(), 0);
+					modelo.setValueAt(p.getPreco(), tbProduto.getSelectedRow(), 1);
+					modelo.setValueAt(p.getEstoque(), tbProduto.getSelectedRow(), 2);
+				}
+				}
 		});
 		btnEditar.setBounds(344, 90, 89, 23);
 		contentPane.add(btnEditar);
