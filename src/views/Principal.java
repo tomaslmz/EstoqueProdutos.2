@@ -1,26 +1,29 @@
 package views;
 
+import model.Produto;
 import java.awt.EventQueue;
-import java.awt.Image;
 
 import javax.swing.JFrame;
 import javax.swing.JPanel;
 import javax.swing.border.EmptyBorder;
-import java.awt.event.ContainerAdapter;
-import java.awt.event.ContainerEvent;
-import javax.swing.JTabbedPane;
-import javax.swing.ImageIcon;
-import javax.swing.JButton;
-import javax.swing.JFileChooser;
 import javax.swing.JLabel;
+import javax.swing.JOptionPane;
 import javax.swing.JTextField;
+import javax.swing.JTable;
+import javax.swing.JButton;
 import java.awt.event.ActionListener;
 import java.awt.event.ActionEvent;
+import javax.swing.table.DefaultTableModel;
 
 public class Principal extends JFrame {
 
 	private JPanel contentPane;
-	private JTextField txtArquivo;
+	private JTextField txtNome;
+	private JTextField txtPreco;
+	private JTextField txtEstoque;
+	private JTable tbProduto;
+	private JButton btnApagar;
+	private JButton btnEditar;
 
 	/**
 	 * Launch the application.
@@ -42,75 +45,129 @@ public class Principal extends JFrame {
 	 * Create the frame.
 	 */
 	public Principal() {
-		addContainerListener(new ContainerAdapter() {
-			@Override
-			public void componentRemoved(ContainerEvent e) {
-//				Login login = new Login();
-//				login.setVisible(true);
-			}
-		});
 		setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
-		setBounds(100, 100, 825, 563);
+		setBounds(100, 100, 487, 519);
 		contentPane = new JPanel();
 		contentPane.setBorder(new EmptyBorder(5, 5, 5, 5));
 
 		setContentPane(contentPane);
 		contentPane.setLayout(null);
 		
-		JTabbedPane tabbedPane = new JTabbedPane(JTabbedPane.TOP);
-		tabbedPane.setBounds(10, 11, 789, 502);
-		contentPane.add(tabbedPane);
+		JLabel lblNewLabel = new JLabel("Nome");
+		lblNewLabel.setBounds(65, 36, 46, 14);
+		contentPane.add(lblNewLabel);
 		
-		JPanel panel = new JPanel();
-		tabbedPane.addTab("Registro de produtos", null, panel, null);
-		panel.setLayout(null);
+		JLabel lbPreco = new JLabel("Preço");
+		lbPreco.setBounds(65, 94, 46, 14);
+		contentPane.add(lbPreco);
 		
-		JButton btnNewButton = new JButton("New button");
-		btnNewButton.setBounds(347, 5, 89, 23);
-		panel.add(btnNewButton);
+		JLabel lbEstoque = new JLabel("Estoque");
+		lbEstoque.setBounds(65, 156, 46, 14);
+		contentPane.add(lbEstoque);
 		
-		JPanel panel_1 = new JPanel();
-		tabbedPane.addTab("Visualizar produtos", null, panel_1, null);
-		panel_1.setLayout(null);
+		txtNome = new JTextField();
+		txtNome.setBounds(121, 33, 198, 20);
+		contentPane.add(txtNome);
+		txtNome.setColumns(10);
 		
-		JLabel lblNewLabel = new JLabel("Escolha um arquivo");
-		lblNewLabel.setBounds(58, 40, 100, 14);
-		panel_1.add(lblNewLabel);
+		txtPreco = new JTextField();
+		txtPreco.setBounds(121, 91, 198, 20);
+		contentPane.add(txtPreco);
+		txtPreco.setColumns(10);
 		
-		txtArquivo = new JTextField();
-		txtArquivo.setBounds(58, 75, 247, 20);
-		panel_1.add(txtArquivo);
-		txtArquivo.setColumns(10);
+		txtEstoque = new JTextField();
+		txtEstoque.setBounds(121, 153, 198, 20);
+		contentPane.add(txtEstoque);
+		txtEstoque.setColumns(10);
 		
-		JButton btnAbrir = new JButton("Abrir");
+		tbProduto = new JTable();
+		tbProduto.setModel(new DefaultTableModel(
+			new Object[][] {
+			},
+			new String[] {
+				"Nome", "Pre\u00E7o", "Estoque"
+			}
+		));
+		tbProduto.setBounds(41, 249, 392, 202);
+		contentPane.add(tbProduto);
 		
-		btnAbrir.setBounds(137, 117, 89, 23);
-		panel_1.add(btnAbrir);
-		
-		JLabel lbFoto = new JLabel("");
-		lbFoto.setBounds(439, 58, 291, 266);
-		panel_1.add(lbFoto);
-		
-		btnAbrir.addActionListener(new ActionListener() {
+		JButton btnSalvar = new JButton("Salvar");
+		btnSalvar.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent e) {
-				//Abrir o arquivo:
-				JFileChooser abrirArquivo = new JFileChooser();
-				
-				int status = abrirArquivo.showOpenDialog(getParent());
-				
-				
-				txtArquivo.setText(abrirArquivo.getSelectedFile().toString());
-				
-				if(status == abrirArquivo.APPROVE_OPTION) {
-					//ImageIcon imageicon = new ImageIcon(txtArquivo.getText()).getImage().getScaledInstance(300, 300, java.awt.Image);
-					ImageIcon imageicon = new ImageIcon(txtArquivo.getText());
-					Image image = imageicon.getImage().getScaledInstance(300, 300,  java.awt.Image.SCALE_SMOOTH);
-//					Image newimg = image.getScaledInstance(300, 300,  java.awt.Image.SCALE_SMOOTH);
-					imageicon = new ImageIcon(image);
-					lbFoto.setIcon(imageicon);
+				if(txtNome.getText().isEmpty() || txtPreco.getText().isEmpty() || txtEstoque.getText().isEmpty()) {
+					JOptionPane.showMessageDialog(null, "Verifique se todos os campos estão preenchidos!");
+				} else {
+					Produto p = new Produto(txtNome.getText(), Float.parseFloat(txtPreco.getText()), Integer.parseInt(txtEstoque.getText()));
+					
+					DefaultTableModel modelo = (DefaultTableModel) tbProduto.getModel();
+					
+					modelo.addRow(new Object[] {p.getNome(), p.getPreco(), p.getEstoque()});
+					
+					tbProduto.setModel(modelo);
+					
+					txtNome.setText("");
+					txtPreco.setText("");
+					txtEstoque.setText("");
 				}
+			}
+		});
+		btnSalvar.setBounds(344, 32, 89, 23);
+		contentPane.add(btnSalvar);
+		
+		btnApagar = new JButton("Apagar");
+		btnApagar.addActionListener(new ActionListener() {
+			public void actionPerformed(ActionEvent e) {
+				if(tbProduto.getSelectedRow() < 0) {
+					JOptionPane.showMessageDialog(null, "Selecione uma linha para apagar!");
+				} else {
+					DefaultTableModel modelo = (DefaultTableModel) tbProduto.getModel();
+					modelo.removeRow(tbProduto.getSelectedRow());
+				}
+//				System.out.println(modelo.getRowCount());
 				
 			}
 		});
+		btnApagar.setBounds(344, 152, 89, 23);
+		contentPane.add(btnApagar);
+		
+		btnEditar = new JButton("Editar");
+		btnEditar.addActionListener(new ActionListener() {
+			public void actionPerformed(ActionEvent e) {
+				if(tbProduto.getSelectedRow() < 0) {
+					JOptionPane.showMessageDialog(null, "Selecione uma linha para editar");
+				} else {
+					String nome;
+					String preco;
+					String estoque;
+					
+					if(txtNome.getText().isEmpty()) {
+						nome = tbProduto.getModel().getValueAt(tbProduto.getSelectedRow(), 0).toString();
+					} else {
+						nome = txtNome.getText();
+					}
+					
+					if(txtPreco.getText().isEmpty()) {
+						preco = tbProduto.getModel().getValueAt(tbProduto.getSelectedRow(), 1).toString();
+					} else {
+						preco = txtPreco.getText();
+					}
+					
+					if(txtEstoque.getText().isEmpty()) {
+						estoque = tbProduto.getModel().getValueAt(tbProduto.getSelectedRow(), 2).toString();
+					} else {
+						estoque = txtEstoque.getText();
+					}
+					
+					Produto p = new Produto(nome, Float.parseFloat(preco), Integer.parseInt(estoque));
+					DefaultTableModel modelo = (DefaultTableModel) tbProduto.getModel();
+					
+					modelo.setValueAt(p.getNome(), tbProduto.getSelectedRow(), 0);
+					modelo.setValueAt(p.getPreco(), tbProduto.getSelectedRow(), 1);
+					modelo.setValueAt(p.getEstoque(), tbProduto.getSelectedRow(), 2);
+				}
+				}
+		});
+		btnEditar.setBounds(344, 90, 89, 23);
+		contentPane.add(btnEditar);
 	}
 }
