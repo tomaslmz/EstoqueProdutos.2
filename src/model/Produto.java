@@ -11,6 +11,10 @@ public class Produto {
 		setPreco(preco);
 	}
 	
+	public Produto(String nome) {
+		setNome(nome);
+	}
+	
 	public Produto() {
 		setEstoque(0);
 	}

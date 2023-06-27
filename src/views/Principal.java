@@ -1,6 +1,7 @@
 package views;
 
 import model.Produto;
+import data.ProdutoDAO;
 import java.awt.EventQueue;
 
 import javax.swing.JFrame;
@@ -12,6 +13,7 @@ import javax.swing.JTextField;
 import javax.swing.JTable;
 import javax.swing.JButton;
 import java.awt.event.ActionListener;
+import java.sql.Connection;
 import java.awt.event.ActionEvent;
 import javax.swing.table.DefaultTableModel;
 
@@ -45,6 +47,8 @@ public class Principal extends JFrame {
 	 * Create the frame.
 	 */
 	public Principal() {
+		ProdutoDAO connection = new ProdutoDAO();
+		
 		setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
 		setBounds(100, 100, 487, 519);
 		contentPane = new JPanel();
@@ -102,7 +106,7 @@ public class Principal extends JFrame {
 					DefaultTableModel modelo = (DefaultTableModel) tbProduto.getModel();
 					
 					modelo.addRow(new Object[] {p.getNome(), p.getPreco(), p.getEstoque()});
-					
+					connection.salvar(p);
 					tbProduto.setModel(modelo);
 					
 					txtNome.setText("");
@@ -117,12 +121,10 @@ public class Principal extends JFrame {
 		btnApagar = new JButton("Apagar");
 		btnApagar.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent e) {
-				if(tbProduto.getSelectedRow() < 0) {
-					JOptionPane.showMessageDialog(null, "Selecione uma linha para apagar!");
-				} else {
+					Produto p = new Produto(txtNome.getText());
+					connection.deletar(p);
 					DefaultTableModel modelo = (DefaultTableModel) tbProduto.getModel();
 					modelo.removeRow(tbProduto.getSelectedRow());
-				}
 //				System.out.println(modelo.getRowCount());
 				
 			}
